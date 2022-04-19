@@ -1,9 +1,11 @@
 import problem_manager, solved_manager
 from functools import cmp_to_key
 
+organization_url = "https://www.acmicpc.net/school/ranklist/385/%d"
+
 def get_unsolved():
+    solved = set(solved_manager.get_solved(organization_url))
     problems = problem_manager.get_problems()
-    solved = set(solved_manager.get_solved())
     # filter unsolved
     def unsolved(problem):
         return not problem["problemId"] in solved
@@ -33,6 +35,12 @@ def accept_cmp(u, v):
     if u["acceptedUserCount"] == v["acceptedUserCount"]:
         return u["level"] - v["level"]
     return v["acceptedUserCount"] - u["acceptedUserCount"]
+
+# 1~25 범위의 난이도를 "B5", "S1"과 같은 형식의 String으로 변환
+def parse_level(tier):
+    tier -= 1
+    rating = ["B", "S", "G", "P", "D", "R"]
+    return "%s%d" % (rating[tier // 5], 5 - tier % 5)
 
 if __name__ == "__main__":
     print(len(get_unsolved()))

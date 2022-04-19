@@ -51,7 +51,7 @@ def get_problems_by_tier(tier: int) -> list:
         query["page"] += 1
     return problems
 
-def get_problems_by_tier(start_tier: int, end_tier: int) -> list:
+def get_problems_by_tier_range(start_tier: int, end_tier: int) -> list:
     problems = []
     for tier in range(start_tier, end_tier + 1):
         problems += get_problems_by_tier(tier)
@@ -62,8 +62,6 @@ problem_dir = "data/problem.json"
 # 전체 문제 목록 반환
 level_range = 3 # 테스트용으로 범위를 작게 함
 def get_problems():
-    problems = []
-    for tier in range(1, 5 + 1):
-        problems += get_problems_by_tier(tier)
+    problems = get_problems_by_tier_range(1, 5)
     file_manager.write_file(problem_dir, problems)
     return problems
