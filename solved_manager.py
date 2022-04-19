@@ -3,8 +3,6 @@ import request_manager
 import parse_manager
 import file_manager
 
-organization_url = "https://www.acmicpc.net/school/ranklist/385/%d"
-
 # returns int list of solved by user
 def get_solved_by_user(user_id: str) -> list:
     profile_url = "https://www.acmicpc.net/user/%s"
