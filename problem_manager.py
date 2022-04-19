@@ -1,5 +1,6 @@
 import http.client, json, time, requests
-import Unsolved
+import file_manager
+import request_manager
 from bs4 import BeautifulSoup
 
 overhead_time = 3
@@ -33,41 +34,36 @@ def get_problem_by_id(id):
     problems = json.loads(data)
     return problems
 
-# 1~25 범위의 난이도를 정해서 구하는 방법
-def get_problem_by_level(level):
-    level = Unsolved.parse_level(level)
-    page = 1
+def get_problems_by_tier(tier: int) -> list:
+    query_url = "https://solved.ac/api/v3/search/problem"
     problems = []
+    query = {
+        "query": "tier:%d" % tier,
+        "page": 1
+    }
     while True:
-        print("level: %s, page: %s..." % (level, page))
-        time.sleep(overhead_time)
-        conn = http.client.HTTPSConnection("solved.ac")
-        headers = { 'Content-Type': "application/json" }
-        query_statement = "tier%%3A%s&page=%s" % (level, page)
-        conn.request("GET", "/api/v3/search/problem?query=%s" % query_statement, headers=headers)
-        res = conn.getresponse()
-        data = res.read().decode("utf-8")
-        if data == "Not Found" or data == "[]" or not data:
-            return []
-        data = json.loads(data)
-        if not data["items"]:
+        print("tier: %s, page: %s..." % (tier, query["page"]))
+        problem = request_manager.solvedac_api(url=query_url, query_string=query)
+        request_manager.overhead(3)
+        if not problem:
             break
-        problems += data["items"]
-        page += 1
+        problems += problem
+        query["page"] += 1
     return problems
+
+def get_problems_by_tier(start_tier: int, end_tier: int) -> list:
+    problems = []
+    for tier in range(start_tier, end_tier + 1):
+        problems += get_problems_by_tier(tier)
+    return problems
+
+problem_dir = "data/problem.json"
 
 # 전체 문제 목록 반환
 level_range = 3 # 테스트용으로 범위를 작게 함
-def get_problem():
-    problem = []
-    for level in range(level_range, level_range + 2):
-        problem += get_problem_by_level(level)
-    write_problem(problem)
-    return problem
-
-def write_problem(problem):
-    file = open("data/problem.json", "w")
-    for p in problem:
-        file.write(json.dumps(p))
-        file.write("\n")
-    file.close()
+def get_problems():
+    problems = []
+    for tier in range(1, 5 + 1):
+        problems += get_problems_by_tier(tier)
+    file_manager.write_file(problem_dir, problems)
+    return problems
