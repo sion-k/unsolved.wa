@@ -1,16 +1,19 @@
 import request_manager
 import parse_manager
-import file_manager
+import data_manager
 
-user_dir = "data/usercache.json"
+user_dir = "data/user.json"
 
 # returns dict
-# users["ygonepiece"] = {
-# 	solved_count: 1200,
-#	active: True
+# users = {
+#	"ygonepiece": {
+# 		solved_count: 1200,
+#		active: True
+# 	},
+#	...
 # }
 def get_users(organization_url: str) -> dict:
-	old_users = file_manager.read_file(user_dir)
+	old_users = data_manager.read_file(user_dir)
 	users = {}
 	index = 1
 	while True:
