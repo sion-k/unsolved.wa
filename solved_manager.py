@@ -19,7 +19,7 @@ solved_dir = "data/solved.json"
 # returns solved problem given organization
 # for optimization, checks only active user
 def get_solved(organization_url: str) -> list:
-    solved = set(data_manager.read_file(solved_dir))
+    solved = set(data_manager.read_file(solved_dir)["solved"])
     users = user_manager.get_users(organization_url)
     for user_id, user in users.items():
         if not user["active"]:
