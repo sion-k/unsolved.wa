@@ -5,20 +5,21 @@ import data_manager
 user_dir = "data/user.json"
 
 # returns dict
-# users = {
+# users: dict = {
 #	"ygonepiece": {
 # 		solved_count: 1200,
-#		active: True
+#		active: True 
 # 	},
 #	...
 # }
-def get_users(organization_url: str) -> dict:
+def get_users(organization_number: int) -> dict:
 	old_users = data_manager.read_file(user_dir)
 	users = {}
-	index = 1
+	page_index = 1
 	while True:
-		print("user page %d..." % index)
-		rank_list_html = request_manager.get_html(organization_url % index)
+		print("user page %d..." % page_index)
+		rank_list_url = f"https://www.acmicpc.net/school/ranklist/{organization_number}/{page_index}"
+		rank_list_html = request_manager.get_html(rank_list_url)
 		request_manager.overhead(1)
 		if not rank_list_html:
 			break
@@ -30,5 +31,5 @@ def get_users(organization_url: str) -> dict:
 			else:
 				new_users[user_id]["active"] = False
 		users.update(new_users)
-		index += 1
+		page_index += 1
 	return users

@@ -28,10 +28,10 @@ def get_problems_by_tier_range(start_tier: int, end_tier: int) -> list:
     return problems
 
 problem_dir = "data/problem.json"
-tier_range = 4 # 25
+tier_range = 5 # 25
 
 # returns json type problem list
 def get_problems() -> list:
-    problems = get_problems_by_tier_range(1, tier_range)
+    problems = get_problems_by_tier_range(4, tier_range)
     data_manager.write_file(problem_dir, {"problems": problems})
     return problems
