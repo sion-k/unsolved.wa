@@ -16,11 +16,11 @@ def get_solved_by_user(user_id: str) -> list:
 
 solved_dir = "data/solved.json"
 
-# returns solved problem given organization
+# returns solved problem given organization number
 # for optimization, checks only active user
-def get_solved(organization_url: str) -> list:
+def get_solved(organization_number: int) -> list:
     solved = set(data_manager.read_file(solved_dir)["solved"])
-    users = user_manager.get_users(organization_url)
+    users = user_manager.get_users(organization_number)
     for user_id, user in users.items():
         if not user["active"]:
             continue
@@ -33,9 +33,9 @@ def get_solved(organization_url: str) -> list:
 
 unsolved_dir = "data/unsolved.json"
 
-# returns unsolved problem given organization
-def get_unsolved(organization_url: str) -> list:
-    solved = set(get_solved(organization_url))
+# returns unsolved problem given organization number
+def get_unsolved(organization_number: int) -> list:
+    solved = set(get_solved(organization_number))
     problems = problem_manager.get_problems()
     # filter unsolved
     def unsolved(problem):

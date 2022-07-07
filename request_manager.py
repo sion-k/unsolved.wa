@@ -23,11 +23,11 @@ def overhead(overhead_time: int) -> None:
 
 # returns html str
 # returns empty string with failure request
-def get_html(url: str) -> str:
+def get_html(rank_list_url: str) -> str:
     headers = get_header()
-    response = requests.get(url, headers=headers)
+    response = requests.get(rank_list_url, headers=headers)
     if response.status_code != 200:
-        print("%s status_code : %d" % (url, response.status_code))
+        print("%s status_code : %d" % (rank_list_url, response.status_code))
         return ""
     html = response.text
     return html
