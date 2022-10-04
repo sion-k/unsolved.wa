@@ -28,7 +28,7 @@ def get_problems_by_tier_range(start_tier: int, end_tier: int) -> list:
     return problems
 
 problem_dir = "data/problem.json"
-tier_range = 12 # 25
+tier_range = 15 # 25
 
 # returns json type problem list
 def get_problems() -> list:
